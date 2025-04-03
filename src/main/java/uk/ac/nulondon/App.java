@@ -23,7 +23,7 @@ public final class App {
 
         ShortestPathFinder pathFinder = new BellmannFord();
 
-        pathFinder.calculate("A", graph);
+        System.out.println(pathFinder.calculate("A", graph));
 
         visualize(graph, pathFinder.getDistanceMap(), pathFinder.getShortestPathTree());
     }

@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 public class Dijkstra extends ShortestPathFinder{
 
-    public void calculate(String source, List<Vertex> graph) {
+    public boolean calculate(String source, List<Vertex> graph) {
         distanceMap.clear();
         shortestPathTree.clear();
         Map<String, Vertex> vertexMap = graph.stream().collect(Collectors.toMap(Vertex::getName, Function.identity()));
@@ -61,6 +61,7 @@ public class Dijkstra extends ShortestPathFinder{
                 }
             }
         }
+        return true;
     }
 
 

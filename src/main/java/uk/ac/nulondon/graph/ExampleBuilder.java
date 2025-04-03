@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ExampleBuilder {
-    public static List<Vertex> graph (){
+    public static List<Vertex> graph() {
         return List.of(
                 new Vertex("A",
                         Map.of("B", 10, "C", 5)),
@@ -20,7 +20,7 @@ public class ExampleBuilder {
         );
     }
 
-    public static List<Vertex> graphWithNegativeEdges (){
+    public static List<Vertex> graphWithNegativeEdges() {
         return List.of(
                 new Vertex("A",
                         Map.of("B", 6, "C", 7)),
@@ -33,6 +33,13 @@ public class ExampleBuilder {
                 new Vertex("E",
                         Map.of("A", 2, "D", 7))
 
+        );
+    }
+
+    public static List<Vertex> graphWithNegativeLoop() {
+        return List.of(
+                new Vertex("A", Map.of("B", 1)),
+                new Vertex("B", Map.of("A", -2))
         );
     }
 }

@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 public class BellmannFord extends ShortestPathFinder {
 
     @Override
-    public void calculate(String source, List<Vertex> graph) {
+    public boolean calculate(String source, List<Vertex> graph) {
         distanceMap.clear();
         shortestPathTree.clear();
         Map<String, Vertex> vertexMap = graph.stream().collect(Collectors.toMap(Vertex::getName, Function.identity()));
@@ -28,7 +28,14 @@ public class BellmannFord extends ShortestPathFinder {
                 }
             }
         }
-
+        //Final check
+        for (String u : vertexMap.keySet()) {
+            for (String v : vertexMap.get(u).getNeighbours().keySet()) {
+                int alt = distanceMap.get(u) + vertexMap.get(u).getNeighbours().get(v);
+                if (alt < distanceMap.get(v)) return false;
+            }
+        }
+        return true;
 
     }
 
