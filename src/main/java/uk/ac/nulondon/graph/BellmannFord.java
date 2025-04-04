@@ -12,29 +12,39 @@ public class BellmannFord extends ShortestPathFinder {
         shortestPathTree.clear();
         Map<String, Vertex> vertexMap = graph.stream().collect(Collectors.toMap(Vertex::getName, Function.identity()));
 
+        //Setup initial state
         for (Vertex vertex : graph) {
             distanceMap.put(vertex.getName(), Integer.MAX_VALUE);
         }
         distanceMap.put(source, 0);
 
-        for (int i = 0; i < vertexMap.size() - 1; i++) {
-            for (String u : vertexMap.keySet()) {
-                for (String v : vertexMap.get(u).getNeighbours().keySet()) {
-                    int alt = distanceMap.get(u) + vertexMap.get(u).getNeighbours().get(v);
-                    if (alt < distanceMap.get(v)) {
-                        distanceMap.put(v, alt);
-                        shortestPathTree.put(v, u);
+        //Do |V|-1 relaxations
+        for (int i = 0; i < graph.size(); i++) {
+            for (Vertex vertex : graph) {
+                int dist = distanceMap.get(vertex.getName());
+                if (dist == Integer.MAX_VALUE) {
+                    continue;
+                }
+                for (String n : vertex.getNeighbours().keySet()) {
+                    int alt = dist + vertex.getNeighbours().get(n);
+                    if (alt < distanceMap.get(n)) {
+                        distanceMap.put(n, alt);
+                        shortestPathTree.put(n, vertex.getName());
                     }
                 }
             }
         }
-        //Final check
-        for (String u : vertexMap.keySet()) {
-            for (String v : vertexMap.get(u).getNeighbours().keySet()) {
-                int alt = distanceMap.get(u) + vertexMap.get(u).getNeighbours().get(v);
-                if (alt < distanceMap.get(v)) return false;
+
+        //Final check for negative loops
+        for (Vertex vertex : graph) {
+            for (String n : vertex.getNeighbours().keySet()) {
+                if (distanceMap.get(vertex.getName()) + vertex.getNeighbours().get(n) <
+                        distanceMap.get(n)) {
+                    return false;
+                }
             }
         }
+
         return true;
 
     }

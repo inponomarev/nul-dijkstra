@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class Dijkstra extends ShortestPathFinder{
+public class Dijkstra extends ShortestPathFinder {
 
     public boolean calculate(String source, List<Vertex> graph) {
         distanceMap.clear();
@@ -20,10 +20,9 @@ public class Dijkstra extends ShortestPathFinder{
            add v to Q
        dist[source] ← 0
          */
-
-        for (Vertex vertex : graph) {
-            distanceMap.put(vertex.getName(), Integer.MAX_VALUE);
-            q.add(vertex.getName());
+        for (Vertex v : graph) {
+            distanceMap.put(v.getName(), Integer.MAX_VALUE);
+            q.add(v.getName());
         }
         distanceMap.put(source, 0);
 
@@ -39,28 +38,30 @@ public class Dijkstra extends ShortestPathFinder{
                   dist[v] ← alt
                   prev[v] ← u
          */
-
         while (!q.isEmpty()) {
-            //Finding vertex in q with minimum distance
-            int minDist = Integer.MAX_VALUE;
+            //find a vertex with the minimum distance
+            int min = Integer.MAX_VALUE;
             String u = null;
-            for (String s : q) {
-                if (distanceMap.get(s) <= minDist) {
-                    u = s;
-                    minDist = distanceMap.get(s);
+            for (String vertName : q) {
+                if (distanceMap.get(vertName) < min) {
+                    min = distanceMap.get(vertName);
+                    u = vertName;
                 }
             }
             q.remove(u);
-            for (String v : vertexMap.get(u).getNeighbours().keySet()) {
-                if (q.contains(v)) {
-                    int alt = distanceMap.get(u) + vertexMap.get(u).getNeighbours().get(v);
-                    if (alt < distanceMap.get(v)) {
-                        distanceMap.put(v, alt);
-                        shortestPathTree.put(v, u);
+
+            Map<String, Integer> neighbours = vertexMap.get(u).getNeighbours();
+            for (String neighbour : neighbours.keySet()) {
+                if (q.contains(neighbour)) {
+                    int alt = min + neighbours.get(neighbour);
+                    if (alt < distanceMap.get(neighbour)) {
+                        distanceMap.put(neighbour, alt);
+                        shortestPathTree.put(neighbour, u);
                     }
                 }
             }
         }
+
         return true;
     }
 
